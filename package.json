@@ -1,0 +1,23 @@
+{
+  "name": "machina",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Proof-of-concept browser automation toolkit",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/despan/machina.git"
+  },
+  "keywords": [
+    "browser-automation"
+  ],
+  "author": "Mushegh Antaranyan",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/despan/machina/issues"
+  },
+  "homepage": "https://github.com/despan/machina#readme"
+}
