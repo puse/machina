@@ -6,6 +6,9 @@
 # Dependency directories
 node_modules/
 
+# Build artifacts
+build/
+
 # Logs
 *.log
 npm-debug.log*
