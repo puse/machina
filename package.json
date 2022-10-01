@@ -8,7 +8,9 @@
     "test": "jest",
     "compile": "tsc",
     "lint:syntax": "eslint .",
-    "lint:formatting": "prettier . --check"
+    "lint:formatting": "prettier . --check",
+    "fix:syntax": "eslint --fix .",
+    "fix:formatting": "prettier --write ."
   },
   "repository": {
     "type": "git",
