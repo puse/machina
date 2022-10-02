@@ -1,14 +1,17 @@
-describe("ObtainTwitterUserDetails", () => {
-  test("Case: @qeri55916757", async () => {
-    type UserDetails = {
-      name: string;
-      username: string;
-      imageUrl?: string;
-      bio?: string;
-    };
-    type ObtainingUserDetails = (username: string) => Promise<UserDetails>;
+import { mock, MockProxy } from "jest-mock-extended";
 
-    const testDetails: UserDetails = {
+import { UserProfileView } from "./UserProfileView";
+import { obtainingUserDetails, UserDetails } from "./ObtainingUserDetails";
+
+describe("Obtaining user details", () => {
+  let testProfileView: MockProxy<UserProfileView>;
+
+  beforeEach(() => {
+    testProfileView = mock<UserProfileView>();
+  });
+
+  test("Working case: @qeri55916757", async () => {
+    const testSample: UserDetails = {
       name: "Qeri",
       username: "qeri55916757",
       imageUrl:
@@ -16,14 +19,27 @@ describe("ObtainTwitterUserDetails", () => {
       bio: "He's the best uncle ever! He's always up for a good time. He's also a philanthropist.",
     };
 
-    const obtainUserDetails: ObtainingUserDetails = async (
-      username
-    ): Promise<UserDetails> => {
-      throw Error("Not implemented");
-    };
+    testProfileView.readName.mockResolvedValue(testSample.name);
+    testProfileView.readImageUrl.mockResolvedValue(testSample.imageUrl);
+    testProfileView.readBio.mockResolvedValue(testSample.bio);
 
-    const obtainedDetails = await obtainUserDetails(testDetails.username);
+    const obtainedDetails = await obtainingUserDetails(
+      testProfileView,
+      testSample.username
+    );
 
-    expect(obtainedDetails).toEqual(testDetails);
+    expect(obtainedDetails).toEqual(testSample);
+
+    // Imagine `open` is necessary to call first for other functions to work
+    expect(testProfileView.open.mock.invocationCallOrder).toEqual([1]);
+    expect(testProfileView.open).toHaveBeenCalledWith(testSample.username);
+  });
+
+  test("User not found", async () => {
+    testProfileView.open.mockRejectedValue("UserNotFound");
+
+    expect(() =>
+      obtainingUserDetails(testProfileView, "UnknownUsername")
+    ).rejects.toEqual("UserNotFound");
   });
 });
