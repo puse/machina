@@ -8,6 +8,9 @@
   "engines": {
     "node": ">=16"
   },
+  "bin": {
+    "machina": "./bin/machina"
+  },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
