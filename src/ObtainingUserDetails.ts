@@ -4,17 +4,20 @@ export type UserDetails = {
   bio?: string;
 };
 
+export type BlankUserProfileView = {
+  open: (username: string) => Promise<UserProfileView>;
+};
+
 export type UserProfileView = {
-  open: (username: string) => Promise<void>;
   readName: () => Promise<string>;
   readBio: () => Promise<string | undefined>;
 };
 
 export const obtainingUserDetails = async (
-  profileView: UserProfileView,
+  blankProfileView: BlankUserProfileView,
   username: string
 ): Promise<UserDetails> => {
-  await profileView.open(username);
+  const profileView = await blankProfileView.open(username);
 
   const name = await profileView.readName();
   const bio = await profileView.readBio();

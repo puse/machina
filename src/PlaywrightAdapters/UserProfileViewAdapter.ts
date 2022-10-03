@@ -9,19 +9,6 @@ export class UserProfileViewAdapter implements UserProfileView {
     this.page = page;
   }
 
-  async open(username: string): Promise<void> {
-    const { page } = this;
-
-    const url = `https://twitter.com/${username}`;
-    await page.goto(url);
-
-    await Promise.all([
-      page.waitForLoadState("load"),
-      page.waitForLoadState("networkidle"),
-    ]);
-    await page.waitForTimeout(2000);
-  }
-
   async readName() {
     const nameLocator = this.page
       .locator('[data-testid="primaryColumn"]')

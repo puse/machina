@@ -1,15 +1,18 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
 import {
+  BlankUserProfileView,
   obtainingUserDetails,
   UserDetails,
   UserProfileView,
 } from "./ObtainingUserDetails";
 
 describe("Obtaining user details", () => {
+  let testBlankProfileView: MockProxy<BlankUserProfileView>;
   let testProfileView: MockProxy<UserProfileView>;
 
   beforeEach(() => {
+    testBlankProfileView = mock<BlankUserProfileView>();
     testProfileView = mock<UserProfileView>();
   });
 
@@ -20,26 +23,28 @@ describe("Obtaining user details", () => {
       bio: "He's the best uncle ever! He's also a philanthropist.",
     };
 
+    testBlankProfileView.open.mockResolvedValue(testProfileView);
+
     testProfileView.readName.mockResolvedValue(testSample.name);
     testProfileView.readBio.mockResolvedValue(testSample.bio);
 
     const obtainedDetails = await obtainingUserDetails(
-      testProfileView,
+      testBlankProfileView,
       testSample.username
     );
 
     expect(obtainedDetails).toEqual(testSample);
 
     // Imagine `open` is necessary to call first for other functions to work
-    expect(testProfileView.open.mock.invocationCallOrder).toEqual([1]);
-    expect(testProfileView.open).toHaveBeenCalledWith(testSample.username);
+    expect(testBlankProfileView.open.mock.invocationCallOrder).toEqual([1]);
+    expect(testBlankProfileView.open).toHaveBeenCalledWith(testSample.username);
   });
 
   test("User not found", async () => {
-    testProfileView.open.mockRejectedValue("UserNotFound");
+    testBlankProfileView.open.mockRejectedValue("UserNotFound");
 
     expect(() =>
-      obtainingUserDetails(testProfileView, "UnknownUsername")
+      obtainingUserDetails(testBlankProfileView, "UnknownUsername")
     ).rejects.toEqual("UserNotFound");
   });
 });
