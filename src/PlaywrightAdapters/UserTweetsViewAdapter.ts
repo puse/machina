@@ -14,7 +14,12 @@ export class UserTweetsViewAdapter implements UserTweetsView {
 
     const url = `https://twitter.com/${username}`;
     await page.goto(url);
-    await page.waitForLoadState();
+
+    await Promise.all([
+      page.waitForLoadState("load"),
+      page.waitForLoadState("networkidle"),
+    ]);
+    await page.waitForTimeout(1000);
   }
 
   private async focusNextTweet() {
