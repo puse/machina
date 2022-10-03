@@ -1,5 +1,5 @@
 import { Browser, BrowserContext, chromium, Page } from "playwright";
-import { UserProfileView } from "../UserProfileView";
+import { UserProfileView } from "../ObtainingUserDetails";
 import { UserProfileViewAdapter } from "./UserProfileViewAdapter";
 
 jest.setTimeout(30000);

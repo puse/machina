@@ -1,7 +1,10 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { UserProfileView } from "./UserProfileView";
-import { obtainingUserDetails, UserDetails } from "./ObtainingUserDetails";
+import {
+  obtainingUserDetails,
+  UserDetails,
+  UserProfileView,
+} from "./ObtainingUserDetails";
 
 describe("Obtaining user details", () => {
   let testProfileView: MockProxy<UserProfileView>;

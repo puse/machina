@@ -1,9 +1,13 @@
-import { UserProfileView } from "./UserProfileView";
-
 export type UserDetails = {
   name: string;
   username: string;
   bio?: string;
+};
+
+export type UserProfileView = {
+  open: (username: string) => Promise<void>;
+  readName: () => Promise<string>;
+  readBio: () => Promise<string | undefined>;
 };
 
 export const obtainingUserDetails = async (
