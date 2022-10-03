@@ -10,7 +10,7 @@ describe("UserProfileView with Playwright", () => {
   let testPage: Page;
 
   beforeAll(async () => {
-    testBrowser = await chromium.launch({ devtools: true });
+    testBrowser = await chromium.launch({ devtools: false });
     testBrowserContext = await testBrowser.newContext();
   });
 
