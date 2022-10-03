@@ -1,6 +1,6 @@
 import assert from "assert";
 import { Page } from "playwright";
-import { UserProfileView } from "../UserProfileView";
+import { UserProfileView } from "../ObtainingUserDetails";
 
 export class UserProfileViewAdapter implements UserProfileView {
   private page: Page;
