@@ -34,5 +34,3 @@ Run tests with Jest
 ```sh
 npm run test
 ```
-
-![crane rolling out humanoid to stage](./art-abstract-crane-lifting-humanoid.png)
