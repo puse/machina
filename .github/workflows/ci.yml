@@ -27,6 +27,8 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npx playwright install --with-deps chromium
     - run: npm run compile
+    - run: npm run lint:syntax
+    - run: npm run lint:formatting
+    - run: npx playwright install --with-deps chromium
     - run: npm test
