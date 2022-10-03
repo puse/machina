@@ -28,11 +28,6 @@ export class UserProfileViewAdapter implements UserProfileView {
     return name;
   }
 
-  async readImageUrl() {
-    throw new Error("NotImplemented");
-    return void 0;
-  }
-
   async readBio() {
     const bioLocator = this.page.locator('[data-testid="UserDescription"]');
     const bio = await bioLocator.textContent();

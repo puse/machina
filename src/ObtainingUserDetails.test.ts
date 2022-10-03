@@ -14,13 +14,10 @@ describe("Obtaining user details", () => {
     const testSample: UserDetails = {
       name: "Qeri",
       username: "qeri55916757",
-      imageUrl:
-        "https://pbs.twimg.com/profile_images/1575489862832361473/HEzvhPUK_400x400.jpg",
-      bio: "He's the best uncle ever! He's always up for a good time. He's also a philanthropist.",
+      bio: "He's the best uncle ever! He's also a philanthropist.",
     };
 
     testProfileView.readName.mockResolvedValue(testSample.name);
-    testProfileView.readImageUrl.mockResolvedValue(testSample.imageUrl);
     testProfileView.readBio.mockResolvedValue(testSample.bio);
 
     const obtainedDetails = await obtainingUserDetails(
