@@ -19,9 +19,9 @@ const cli = meow(helpText, {
   flags: {
     headless: {
       type: "boolean",
-      default: true
-    }
-  }
+      default: true,
+    },
+  },
 });
 
 console.log(cli.input, cli.flags);
