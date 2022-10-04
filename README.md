@@ -27,6 +27,14 @@ Install dependencies
 npm install
 ```
 
+### Usage
+
+Run `machina` CLI locally with `npx`
+
+```sh
+npx machina --help
+```
+
 ### Testing
 
 Run tests with Jest
