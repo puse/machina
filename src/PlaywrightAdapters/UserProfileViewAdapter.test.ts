@@ -7,7 +7,6 @@ jest.setTimeout(30000);
 describe("UserProfileView with Playwright", () => {
   let testBrowser: Browser;
   let testBrowserContext: BrowserContext;
-  let testPage: Page;
 
   beforeAll(async () => {
     testBrowser = await chromium.launch({ devtools: false });
@@ -29,8 +28,7 @@ describe("UserProfileView with Playwright", () => {
     };
 
     beforeAll(async () => {
-      testPage = await testBrowserContext.newPage();
-      profileView = new UserProfileViewAdapter(testPage);
+      profileView = new UserProfileViewAdapter(testBrowserContext);
     });
 
     test("open by username", async () => {

@@ -1,16 +1,24 @@
 import assert from "assert";
-import { Page } from "playwright";
+import { BrowserContext, Page } from "playwright";
 import { UserProfileView } from "../ObtainingUserDetails";
 
 export class UserProfileViewAdapter implements UserProfileView {
-  private page: Page;
+  private browserContext: BrowserContext;
+  private page?: Page;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(browserContext: BrowserContext) {
+    this.browserContext = browserContext;
+  }
+
+  private async resolvePage(): Promise<Page> {
+    if (!this.page) {
+      this.page = await this.browserContext.newPage();
+    }
+    return this.page;
   }
 
   async open(username: string): Promise<void> {
-    const { page } = this;
+    const page = await this.resolvePage();
 
     const url = `https://twitter.com/${username}`;
     await page.goto(url);
@@ -23,7 +31,9 @@ export class UserProfileViewAdapter implements UserProfileView {
   }
 
   async readName() {
-    const nameLocator = this.page
+    const page = await this.resolvePage();
+
+    const nameLocator = page
       .locator('[data-testid="primaryColumn"]')
       .locator('h2[role="heading"]');
 
@@ -34,7 +44,9 @@ export class UserProfileViewAdapter implements UserProfileView {
   }
 
   async readBio() {
-    const bioLocator = this.page.locator('[data-testid="UserDescription"]');
+    const page = await this.resolvePage();
+
+    const bioLocator = page.locator('[data-testid="UserDescription"]');
     const bio = await bioLocator.textContent();
     return bio || undefined;
   }

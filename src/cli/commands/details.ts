@@ -5,9 +5,8 @@ import { UserProfileViewAdapter } from "../../PlaywrightAdapters/UserProfileView
 
 export const details: RunnerCommand = {
   name: "details",
-  callback: async (context, ...input) => {
-    const page = await context.browserContext.newPage();
-    const profileView = new UserProfileViewAdapter(page);
+  callback: async ({ browserContext }, ...input) => {
+    const profileView = new UserProfileViewAdapter(browserContext);
 
     const username = input[0];
     if (!username) {
