@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 import meow from "meow";
+import { runner } from "../build/cli.js";
 
 const helpText = `
 	Usage
@@ -24,4 +25,4 @@ const cli = meow(helpText, {
   },
 });
 
-console.log(cli.input, cli.flags);
+runner(cli.input, cli.flags);
