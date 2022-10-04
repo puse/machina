@@ -5,9 +5,8 @@ import { UserTweetsViewAdapter } from "../../PlaywrightAdapters/UserTweetsViewAd
 
 export const tweets: RunnerCommand = {
   name: "tweets",
-  callback: async (context, ...input) => {
-    const page = await context.browserContext.newPage();
-    const tweetsView = new UserTweetsViewAdapter(page);
+  callback: async ({ browserContext }, ...input) => {
+    const tweetsView = new UserTweetsViewAdapter(browserContext);
 
     const username = input[0];
     if (!username) {

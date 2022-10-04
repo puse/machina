@@ -7,7 +7,6 @@ jest.setTimeout(30000);
 describe("UserTweetsView with Playwright", () => {
   let testBrowser: Browser;
   let testBrowserContext: BrowserContext;
-  let testPage: Page;
 
   beforeAll(async () => {
     testBrowser = await chromium.launch({ devtools: false });
@@ -38,8 +37,7 @@ describe("UserTweetsView with Playwright", () => {
     ];
 
     beforeAll(async () => {
-      testPage = await testBrowserContext.newPage();
-      testView = new UserTweetsViewAdapter(testPage);
+      testView = new UserTweetsViewAdapter(testBrowserContext);
     });
 
     test("open by username", async () => {

@@ -1,16 +1,24 @@
 import assert from "assert";
-import { Locator, Page } from "playwright";
+import { BrowserContext, Locator, Page } from "playwright";
 import { UserTweetsView } from "../CollectingUserTweets";
 
 export class UserTweetsViewAdapter implements UserTweetsView {
-  private page: Page;
+  private browserContext: BrowserContext;
+  private page?: Page;
 
-  constructor(page: Page) {
-    this.page = page;
+  constructor(browserContext: BrowserContext) {
+    this.browserContext = browserContext;
+  }
+
+  private async resolvePage(): Promise<Page> {
+    if (!this.page) {
+      this.page = await this.browserContext.newPage();
+    }
+    return this.page;
   }
 
   async open(username: string): Promise<void> {
-    const { page } = this;
+    const page = await this.resolvePage();
 
     const url = `https://twitter.com/${username}`;
     await page.goto(url);
@@ -23,7 +31,7 @@ export class UserTweetsViewAdapter implements UserTweetsView {
   }
 
   private async focusNextTweet() {
-    const { page } = this;
+    const page = await this.resolvePage();
 
     const initialFocusedLocator = page.locator(
       '[data-focusvisible-polyfill="true"]'
