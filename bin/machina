@@ -1,4 +1,0 @@
-#!/usr/bin/env node
-
-console.log("CLI does not work. Below is the input.");
-console.log(process.argv);
