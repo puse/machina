@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import meow from "meow";
-import { runner } from "../build/cli.js";
+import { run } from "../build/cli/cli.js";
 
 const helpText = `
 	Usage
@@ -15,7 +15,7 @@ const helpText = `
 	  $ machina details shakira --no-headless
 `;
 
-const cli = meow(helpText, {
+const { input, flags } = meow(helpText, {
   importMeta: import.meta,
   flags: {
     headless: {
@@ -25,4 +25,4 @@ const cli = meow(helpText, {
   },
 });
 
-runner(cli.input, cli.flags);
+run(input, flags);
