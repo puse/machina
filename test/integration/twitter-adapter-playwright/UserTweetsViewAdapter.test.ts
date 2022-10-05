@@ -1,7 +1,7 @@
 import { Browser, BrowserContext, chromium, Page } from "playwright";
-import { UserTweetsView } from "../../../src/twitter-api/ports/UserTweetsView";
-import { Tweet } from "../../../src/twitter-model/Tweet";
-import { UserTweetsViewAdapter } from "../../../src/twitter-adapter-playwright/UserTweetsViewAdapter";
+import { UserTweetsView } from "@/twitter-api/ports/UserTweetsView";
+import { Tweet } from "@/twitter-model/Tweet";
+import { UserTweetsViewAdapter } from "@/twitter-adapter-playwright/UserTweetsViewAdapter";
 
 jest.setTimeout(30000);
 
