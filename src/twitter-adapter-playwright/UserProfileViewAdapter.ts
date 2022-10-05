@@ -31,15 +31,10 @@ export class UserProfileViewAdapter implements UserProfileView {
   }
 
   static async ensureProfile({ page }: ViewContext) {
-    const resolve = () => Promise.resolve();
-
-    const rejectWithNotFound = async () => {
-      const notFound = new Error("Not found");
-      return Promise.reject(notFound);
-    };
+    const rejectWithNotFound = () => Promise.reject(new Error("Not found"));
 
     return Promise.race([
-      page.waitForSelector('[data-testid="UserName"]').then(resolve),
+      page.waitForSelector('[data-testid="UserName"]'),
       page
         .waitForSelector('[data-testid="emptyState"]')
         .then(rejectWithNotFound),
