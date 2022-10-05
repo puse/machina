@@ -70,15 +70,24 @@ export class UserTweetsViewAdapter implements UserTweetsView {
     return focusedTweetLocator ? this.parseTweet(focusedTweetLocator) : null;
   }
 
+  static async ensureTweets({ page }: ViewContext) {
+    const rejectWithNotFound = async () => {
+      return Promise.reject(new Error("Not found"));
+    };
+
+    return Promise.race([
+      page.locator('article[data-testid="tweet"]').first(),
+      page
+        .waitForSelector('[data-testid="emptyState"]')
+        .then(rejectWithNotFound),
+    ]);
+  }
+
   static async open({ page }: ViewContext, username: string) {
     const url = `https://twitter.com/${username}`;
-    await page.goto(url);
+    await page.goto(url, { waitUntil: "networkidle" });
 
-    await Promise.all([
-      page.waitForLoadState("load"),
-      page.waitForLoadState("networkidle"),
-    ]);
-    await page.waitForTimeout(1000);
+    await this.ensureTweets({ page });
 
     return new UserTweetsViewAdapter(page);
   }
