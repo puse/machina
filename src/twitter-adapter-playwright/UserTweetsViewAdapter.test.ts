@@ -1,5 +1,5 @@
 import { Browser, BrowserContext, chromium, Page } from "playwright";
-import { UserTweetsView } from "../CollectingUserTweets";
+import { UserTweetsView } from "../twitter-api/ports/UserTweetsView";
 import { Tweet } from "../twitter-model/Tweet";
 import { UserTweetsViewAdapter } from "./UserTweetsViewAdapter";
 

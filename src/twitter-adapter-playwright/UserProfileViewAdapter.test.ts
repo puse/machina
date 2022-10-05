@@ -1,5 +1,5 @@
 import { Browser, BrowserContext, chromium, Page } from "playwright";
-import { UserProfileView } from "../ObtainingUserDetails";
+import { UserProfileView } from "../twitter-api/ports/UserProfileView";
 import { UserProfileViewAdapter } from "./UserProfileViewAdapter";
 
 jest.setTimeout(30000);

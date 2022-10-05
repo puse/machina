@@ -1,9 +1,5 @@
+import { UserTweetsView } from "./twitter-api/ports/UserTweetsView";
 import { Tweet } from "./twitter-model/Tweet";
-
-export type UserTweetsView = {
-  open: (username: string) => Promise<void>;
-  readNextTweet: () => Promise<Tweet | null>;
-};
 
 export const collectingUserTweets = async (
   tweetsView: UserTweetsView,
