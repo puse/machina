@@ -1,6 +1,6 @@
 import assert from "assert";
 import { Page } from "playwright";
-import { UserProfileView } from "../twitter-api/ports";
+import { UserProfileView } from "../twitter-api/ports/UserProfileView";
 
 export class UserProfileViewAdapter implements UserProfileView {
   private page: Page;
