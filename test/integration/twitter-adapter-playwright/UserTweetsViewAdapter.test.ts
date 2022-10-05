@@ -1,7 +1,6 @@
-import { Browser, BrowserContext, chromium, Page } from "playwright";
+import { Browser, BrowserContext, chromium } from "playwright";
 import { UserTweetsView } from "@/twitter-api/ports/UserTweetsView";
 import { Tweet } from "@/twitter-model/Tweet";
-import { UserTweetsViewAdapter } from "@/twitter-adapter-playwright/UserTweetsViewAdapter";
 import { TwitterBrowser } from "@/twitter-api/ports/TwitterBrowser";
 import { TwitterBrowserAdapter } from "@/twitter-adapter-playwright/TwitterBrowserAdapter";
 
@@ -13,7 +12,7 @@ describe("UserTweetsView with Playwright", () => {
   let twitterBrowser: TwitterBrowser;
 
   beforeAll(async () => {
-    browser = await chromium.launch({ devtools: false });
+    browser = await chromium.launch({ devtools: true });
     browserContext = await browser.newContext();
     twitterBrowser = new TwitterBrowserAdapter(browserContext);
   });
@@ -58,6 +57,13 @@ describe("UserTweetsView with Playwright", () => {
     test("read one more time after the last tweet", async () => {
       const tweet = await tweetsView.readNextTweet();
       expect(tweet).toBeNull();
+    });
+  });
+
+  describe("Failures", () => {
+    test("User not found", async () => {
+      const open = () => twitterBrowser.openUserProfile("qeri112233445566");
+      await expect(open()).rejects.toThrowError(/not found/i);
     });
   });
 });

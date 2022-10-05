@@ -30,15 +30,27 @@ export class UserProfileViewAdapter implements UserProfileView {
     return bio || undefined;
   }
 
+  static async ensureProfile({ page }: ViewContext) {
+    const resolve = () => Promise.resolve();
+
+    const rejectWithNotFound = async () => {
+      const notFound = new Error("Not found");
+      return Promise.reject(notFound);
+    };
+
+    return Promise.race([
+      page.waitForSelector('[data-testid="UserName"]').then(resolve),
+      page
+        .waitForSelector('[data-testid="emptyState"]')
+        .then(rejectWithNotFound),
+    ]);
+  }
+
   static async open({ page }: ViewContext, username: string) {
     const url = `https://twitter.com/${username}`;
-    await page.goto(url);
+    await page.goto(url, { waitUntil: "networkidle" });
 
-    await Promise.all([
-      page.waitForLoadState("load"),
-      page.waitForLoadState("networkidle"),
-    ]);
-    await page.waitForTimeout(2000);
+    await this.ensureProfile({ page });
 
     return new UserProfileViewAdapter(page);
   }
