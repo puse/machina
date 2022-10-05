@@ -1,7 +1,7 @@
 import { BrowserContext } from "playwright";
 import { TwitterBrowser } from "@/twitter-api/ports/TwitterBrowser";
-import { UserProfileViewAdapter } from "./UserProfileViewAdapter";
-import { UserTweetsViewAdapter } from "./UserTweetsViewAdapter";
+import { UserProfileViewAdapter } from "./UserProfileViewAdapter.js";
+import { UserTweetsViewAdapter } from "./UserTweetsViewAdapter.js";
 
 export class TwitterBrowserAdapter implements TwitterBrowser {
   private context: BrowserContext;
@@ -12,15 +12,11 @@ export class TwitterBrowserAdapter implements TwitterBrowser {
 
   async openUserTweets(username: string) {
     const page = await this.context.newPage();
-    const view = new UserTweetsViewAdapter(page);
-    await view.open(username);
-    return view;
+    return UserTweetsViewAdapter.open({ page }, username);
   }
 
   async openUserProfile(username: string) {
     const page = await this.context.newPage();
-    const view = new UserProfileViewAdapter(page);
-    await view.open(username);
-    return view;
+    return UserProfileViewAdapter.open({ page }, username);
   }
 }
