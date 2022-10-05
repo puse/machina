@@ -3,12 +3,15 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { Tweet } from "@/twitter-model/Tweet";
 import { collectingUserTweets } from "./CollectingUserTweets";
 import { UserTweetsView } from "./ports/UserTweetsView";
+import { TwitterBrowser } from "./ports/TwitterBrowser";
 
 describe("collecting user tweets", () => {
   let testTweetsView: MockProxy<UserTweetsView>;
+  let testTwitterBrowser: MockProxy<TwitterBrowser>;
 
   beforeEach(() => {
     testTweetsView = mock<UserTweetsView>();
+    testTwitterBrowser = mock<TwitterBrowser>();
   });
 
   test("usage", async () => {
@@ -31,7 +34,10 @@ describe("collecting user tweets", () => {
     testTweetsView.readNextTweet.mockResolvedValueOnce(testTweets[1]);
     testTweetsView.readNextTweet.mockResolvedValueOnce(null);
 
-    const tweets = await collectingUserTweets(testTweetsView, "qeri55916757");
+    const tweets = await collectingUserTweets(
+      { tweetsView: testTweetsView, twitterBrowser: testTwitterBrowser },
+      "qeri55916757"
+    );
 
     expect(tweets).toEqual(testTweets);
 

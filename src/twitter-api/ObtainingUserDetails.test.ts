@@ -3,12 +3,15 @@ import { mock, MockProxy } from "jest-mock-extended";
 import { UserDetails } from "@/twitter-model/UserDetails";
 import { obtainingUserDetails } from "./ObtainingUserDetails";
 import { UserProfileView } from "./ports/UserProfileView";
+import { TwitterBrowser } from "./ports/TwitterBrowser";
 
 describe("Obtaining user details", () => {
   let testProfileView: MockProxy<UserProfileView>;
+  let testTwitterBrowser: MockProxy<TwitterBrowser>;
 
   beforeEach(() => {
     testProfileView = mock<UserProfileView>();
+    testTwitterBrowser = mock<TwitterBrowser>();
   });
 
   test("Working case: @qeri55916757", async () => {
@@ -22,7 +25,7 @@ describe("Obtaining user details", () => {
     testProfileView.readBio.mockResolvedValue(testSample.bio);
 
     const obtainedDetails = await obtainingUserDetails(
-      testProfileView,
+      { profileView: testProfileView, twitterBrowser: testTwitterBrowser },
       testSample.username
     );
 
@@ -37,7 +40,10 @@ describe("Obtaining user details", () => {
     testProfileView.open.mockRejectedValue("UserNotFound");
 
     expect(() =>
-      obtainingUserDetails(testProfileView, "UnknownUsername")
+      obtainingUserDetails(
+        { profileView: testProfileView, twitterBrowser: testTwitterBrowser },
+        "UnknownUsername"
+      )
     ).rejects.toEqual("UserNotFound");
   });
 });

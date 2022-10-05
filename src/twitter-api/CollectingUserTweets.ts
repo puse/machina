@@ -1,8 +1,14 @@
 import { Tweet } from "@/twitter-model/Tweet";
 import { UserTweetsView } from "./ports/UserTweetsView";
+import { TwitterBrowser } from "./ports/TwitterBrowser";
+
+type Dependencies = {
+  tweetsView: UserTweetsView;
+  twitterBrowser: TwitterBrowser;
+};
 
 export const collectingUserTweets = async (
-  tweetsView: UserTweetsView,
+  { tweetsView }: Dependencies,
   username: string
 ): Promise<Tweet[]> => {
   await tweetsView.open(username);
