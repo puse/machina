@@ -1,7 +1,7 @@
 import { RunnerCommand } from "../RunnerCommand";
 
 import { obtainingUserDetails } from "../../ObtainingUserDetails.js";
-import { UserProfileViewAdapter } from "../../PlaywrightAdapters/UserProfileViewAdapter.js";
+import { UserProfileViewAdapter } from "../../twitter-adapter-playwright/UserProfileViewAdapter.js";
 
 export const details: RunnerCommand = {
   name: "details",

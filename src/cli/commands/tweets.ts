@@ -1,7 +1,7 @@
 import { RunnerCommand } from "../RunnerCommand";
 
 import { collectingUserTweets } from "../../CollectingUserTweets.js";
-import { UserTweetsViewAdapter } from "../../PlaywrightAdapters/UserTweetsViewAdapter.js";
+import { UserTweetsViewAdapter } from "../../twitter-adapter-playwright/UserTweetsViewAdapter.js";
 
 export const tweets: RunnerCommand = {
   name: "tweets",
