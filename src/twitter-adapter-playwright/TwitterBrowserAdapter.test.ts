@@ -6,9 +6,14 @@ import { UserProfileViewAdapter } from "./UserProfileViewAdapter";
 import { UserTweetsViewAdapter } from "./UserTweetsViewAdapter";
 import { TwitterBrowserAdapter } from "./TwitterBrowserAdapter";
 
-const resolveElementHandler = () => {
-  const handle = null as unknown as ElementHandle<HTMLElement>;
-  return Promise.resolve(handle);
+/** Helper function to resolve ElementHandle based on given order.
+ * Useful for `page.waitForSelector`
+ */
+const resolveSelectorInOrder = (partials: string[]) => async (selector: string): Promise<ElementHandle<HTMLElement>> => {
+  const index = partials.findIndex((partial) => selector.includes(partial));
+  const order = index === -1 ? partials.length : index;
+  await delay(order * 10)
+  return null as unknown as ElementHandle<HTMLElement>;
 };
 
 describe("TwitterBrowser", () => {
@@ -38,11 +43,12 @@ describe("TwitterBrowser", () => {
 
     describe("openUserProfile", () => {
       beforeEach(() => {
-        page.waitForSelector.mockImplementation((selector) => {
-          return selector.includes('data-testid="UserName"')
-            ? resolveElementHandler()
-            : delay(50).then(resolveElementHandler);
-        });
+        page.waitForSelector.mockImplementation(
+          resolveSelectorInOrder([
+            'data-testid="UserName"',
+            'data-testid="emptyState"',
+          ])
+        );
       });
 
       test("should open Twitter profile", async () => {
@@ -56,11 +62,12 @@ describe("TwitterBrowser", () => {
       });
 
       test("should fail if user not found", async () => {
-        page.waitForSelector.mockImplementation((selector) => {
-          return selector.includes('data-testid="emptyState"')
-            ? resolveElementHandler()
-            : delay(50).then(resolveElementHandler);
-        });
+        page.waitForSelector.mockImplementation(
+          resolveSelectorInOrder([
+            'data-testid="emptyState"',
+            'data-testid="UserName"',
+          ])
+        );
 
         const open = () => twitterBrowser.openUserTweets("shakira");
         await expect(open()).rejects.toThrowError(/not found/i);
@@ -69,11 +76,12 @@ describe("TwitterBrowser", () => {
 
     describe("openUserTweets", () => {
       beforeEach(() => {
-        page.waitForSelector.mockImplementation((selector) => {
-          return selector.includes('data-testid="UserName"')
-            ? resolveElementHandler()
-            : delay(50).then(resolveElementHandler);
-        });
+        page.waitForSelector.mockImplementation(
+          resolveSelectorInOrder([
+            'data-testid="tweet"',
+            'data-testid="emptyState"',
+          ])
+        );
       });
 
       test("should open Twitter profile", async () => {
@@ -87,11 +95,12 @@ describe("TwitterBrowser", () => {
       });
 
       test("should fail if user not found", async () => {
-        page.waitForSelector.mockImplementation((selector) => {
-          return selector.includes('data-testid="emptyState"')
-            ? resolveElementHandler()
-            : delay(50).then(resolveElementHandler);
-        });
+        page.waitForSelector.mockImplementation(
+          resolveSelectorInOrder([
+            'data-testid="emptyState"',
+            'data-testid="tweet"',
+          ])
+        );
 
         const open = () => twitterBrowser.openUserTweets("shakira");
         await expect(open()).rejects.toThrowError(/not found/i);
