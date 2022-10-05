@@ -6,12 +6,14 @@ import { UserTweetsView } from "./ports/UserTweetsView";
 import { TwitterBrowser } from "./ports/TwitterBrowser";
 
 describe("collecting user tweets", () => {
-  let testTweetsView: MockProxy<UserTweetsView>;
-  let testTwitterBrowser: MockProxy<TwitterBrowser>;
+  let twitterBrowser: MockProxy<TwitterBrowser>;
+  let tweetsView: MockProxy<UserTweetsView>;
 
   beforeEach(() => {
-    testTweetsView = mock<UserTweetsView>();
-    testTwitterBrowser = mock<TwitterBrowser>();
+    twitterBrowser = mock<TwitterBrowser>();
+
+    tweetsView = mock<UserTweetsView>();
+    twitterBrowser.openUserTweets.mockResolvedValueOnce(tweetsView);
   });
 
   test("usage", async () => {
@@ -30,17 +32,15 @@ describe("collecting user tweets", () => {
       },
     ];
 
-    testTweetsView.readNextTweet.mockResolvedValueOnce(testTweets[0]);
-    testTweetsView.readNextTweet.mockResolvedValueOnce(testTweets[1]);
-    testTweetsView.readNextTweet.mockResolvedValueOnce(null);
+    tweetsView.readNextTweet.mockResolvedValueOnce(testTweets[0]);
+    tweetsView.readNextTweet.mockResolvedValueOnce(testTweets[1]);
+    tweetsView.readNextTweet.mockResolvedValueOnce(null);
 
     const tweets = await collectingUserTweets(
-      { tweetsView: testTweetsView, twitterBrowser: testTwitterBrowser },
+      { twitterBrowser },
       "qeri55916757"
     );
 
     expect(tweets).toEqual(testTweets);
-
-    expect(testTweetsView.open).toHaveBeenCalledWith("qeri55916757");
   });
 });

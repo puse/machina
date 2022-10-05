@@ -6,12 +6,14 @@ import { UserProfileView } from "./ports/UserProfileView";
 import { TwitterBrowser } from "./ports/TwitterBrowser";
 
 describe("Obtaining user details", () => {
-  let testProfileView: MockProxy<UserProfileView>;
-  let testTwitterBrowser: MockProxy<TwitterBrowser>;
+  let twitterBrowser: MockProxy<TwitterBrowser>;
+  let profileView: MockProxy<UserProfileView>;
 
   beforeEach(() => {
-    testProfileView = mock<UserProfileView>();
-    testTwitterBrowser = mock<TwitterBrowser>();
+    twitterBrowser = mock<TwitterBrowser>();
+
+    profileView = mock<UserProfileView>();
+    twitterBrowser.openUserProfile.mockResolvedValueOnce(profileView);
   });
 
   test("Working case: @qeri55916757", async () => {
@@ -21,29 +23,16 @@ describe("Obtaining user details", () => {
       bio: "He's the best uncle ever! He's also a philanthropist.",
     };
 
-    testProfileView.readName.mockResolvedValue(testSample.name);
-    testProfileView.readBio.mockResolvedValue(testSample.bio);
+    profileView.readName.mockResolvedValue(testSample.name);
+    profileView.readBio.mockResolvedValue(testSample.bio);
 
     const obtainedDetails = await obtainingUserDetails(
-      { profileView: testProfileView, twitterBrowser: testTwitterBrowser },
+      { twitterBrowser },
       testSample.username
     );
 
     expect(obtainedDetails).toEqual(testSample);
-
-    // Imagine `open` is necessary to call first for other functions to work
-    expect(testProfileView.open.mock.invocationCallOrder).toEqual([1]);
-    expect(testProfileView.open).toHaveBeenCalledWith(testSample.username);
   });
 
-  test("User not found", async () => {
-    testProfileView.open.mockRejectedValue("UserNotFound");
-
-    expect(() =>
-      obtainingUserDetails(
-        { profileView: testProfileView, twitterBrowser: testTwitterBrowser },
-        "UnknownUsername"
-      )
-    ).rejects.toEqual("UserNotFound");
-  });
+  test.todo("User not found");
 });
