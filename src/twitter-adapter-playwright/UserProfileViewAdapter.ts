@@ -2,24 +2,15 @@ import assert from "assert";
 import { Page } from "playwright";
 import { UserProfileView } from "@/twitter-api/ports/UserProfileView";
 
+type ViewContext = {
+  page: Page;
+};
+
 export class UserProfileViewAdapter implements UserProfileView {
   private page: Page;
 
   constructor(page: Page) {
     this.page = page;
-  }
-
-  async open(username: string): Promise<void> {
-    const { page } = this;
-
-    const url = `https://twitter.com/${username}`;
-    await page.goto(url);
-
-    await Promise.all([
-      page.waitForLoadState("load"),
-      page.waitForLoadState("networkidle"),
-    ]);
-    await page.waitForTimeout(2000);
   }
 
   async readName() {
@@ -37,5 +28,18 @@ export class UserProfileViewAdapter implements UserProfileView {
     const bioLocator = this.page.locator('[data-testid="UserDescription"]');
     const bio = await bioLocator.textContent();
     return bio || undefined;
+  }
+
+  static async open({ page }: ViewContext, username: string) {
+    const url = `https://twitter.com/${username}`;
+    await page.goto(url);
+
+    await Promise.all([
+      page.waitForLoadState("load"),
+      page.waitForLoadState("networkidle"),
+    ]);
+    await page.waitForTimeout(2000);
+
+    return new UserProfileViewAdapter(page);
   }
 }

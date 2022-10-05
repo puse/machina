@@ -2,24 +2,15 @@ import assert from "assert";
 import { Locator, Page } from "playwright";
 import { UserTweetsView } from "@/twitter-api/ports/UserTweetsView";
 
+type ViewContext = {
+  page: Page;
+};
+
 export class UserTweetsViewAdapter implements UserTweetsView {
   private page: Page;
 
   constructor(page: Page) {
     this.page = page;
-  }
-
-  async open(username: string): Promise<void> {
-    const { page } = this;
-
-    const url = `https://twitter.com/${username}`;
-    await page.goto(url);
-
-    await Promise.all([
-      page.waitForLoadState("load"),
-      page.waitForLoadState("networkidle"),
-    ]);
-    await page.waitForTimeout(1000);
   }
 
   private async focusNextTweet() {
@@ -77,5 +68,18 @@ export class UserTweetsViewAdapter implements UserTweetsView {
   async readNextTweet() {
     const focusedTweetLocator = await this.focusNextTweet();
     return focusedTweetLocator ? this.parseTweet(focusedTweetLocator) : null;
+  }
+
+  static async open({ page }: ViewContext, username: string) {
+    const url = `https://twitter.com/${username}`;
+    await page.goto(url);
+
+    await Promise.all([
+      page.waitForLoadState("load"),
+      page.waitForLoadState("networkidle"),
+    ]);
+    await page.waitForTimeout(1000);
+
+    return new UserTweetsViewAdapter(page);
   }
 }
