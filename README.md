@@ -29,10 +29,19 @@ npm install
 
 ### Usage
 
-Run `machina` CLI locally with `npx`
+Run `machina` CLI locally with `npx`. Use flag `--no-headless` to follow browser
+visually.
+
+#### Obtaining user details
 
 ```sh
-npx machina --help
+npx machina details shakira
+```
+
+#### Collecting user tweets
+
+```sh
+npx machina tweets qeri55916757
 ```
 
 ### Testing
