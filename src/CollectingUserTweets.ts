@@ -1,9 +1,4 @@
-export type Tweet = {
-  author: string;
-  url: string;
-  time: Date;
-  text: string;
-};
+import { Tweet } from "./twitter-model/Tweet";
 
 export type UserTweetsView = {
   open: (username: string) => Promise<void>;

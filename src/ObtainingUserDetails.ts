@@ -1,8 +1,4 @@
-export type UserDetails = {
-  name: string;
-  username: string;
-  bio?: string;
-};
+import { UserDetails } from "./twitter-model/UserDetails";
 
 export type UserProfileView = {
   open: (username: string) => Promise<void>;
