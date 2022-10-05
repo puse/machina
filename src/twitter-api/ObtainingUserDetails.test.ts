@@ -1,10 +1,8 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import {
-  obtainingUserDetails,
-  UserDetails,
-  UserProfileView,
-} from "./ObtainingUserDetails";
+import { UserDetails } from "../twitter-model/UserDetails";
+import { obtainingUserDetails } from "./ObtainingUserDetails";
+import { UserProfileView } from "./ports/UserProfileView";
 
 describe("Obtaining user details", () => {
   let testProfileView: MockProxy<UserProfileView>;

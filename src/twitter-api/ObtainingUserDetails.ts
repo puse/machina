@@ -1,14 +1,5 @@
-export type UserDetails = {
-  name: string;
-  username: string;
-  bio?: string;
-};
-
-export type UserProfileView = {
-  open: (username: string) => Promise<void>;
-  readName: () => Promise<string>;
-  readBio: () => Promise<string | undefined>;
-};
+import { UserDetails } from "../twitter-model/UserDetails";
+import { UserProfileView } from "./ports/UserProfileView";
 
 export const obtainingUserDetails = async (
   profileView: UserProfileView,
