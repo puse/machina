@@ -12,8 +12,10 @@
     "machina": "./bin/machina"
   },
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
+    "test": "npm run test:unit & npm run test:integration",
+    "test:unit": "jest ./src",
+    "test:unit:watch": "jest ./src --watch",
+    "test:integration": "jest ./test/integration",
     "compile": "tsc",
     "lint:syntax": "eslint .",
     "lint:formatting": "prettier . --check",
