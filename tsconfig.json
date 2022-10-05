@@ -6,9 +6,7 @@
     "outDir": "build",
     "rootDir": "./src",
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
