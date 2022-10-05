@@ -4,7 +4,6 @@
   "private": true,
   "description": "Proof-of-concept browser automation toolkit",
   "main": "index.js",
-  "type": "module",
   "engines": {
     "node": ">=16"
   },
