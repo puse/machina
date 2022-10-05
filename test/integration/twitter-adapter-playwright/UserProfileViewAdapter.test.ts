@@ -1,4 +1,4 @@
-import { Browser, BrowserContext, chromium, Page } from "playwright";
+import { Browser, BrowserContext, chromium } from "playwright";
 import { UserProfileView } from "@/twitter-api/ports/UserProfileView";
 import { TwitterBrowserAdapter } from "@/twitter-adapter-playwright/TwitterBrowserAdapter";
 import { TwitterBrowser } from "@/twitter-api/ports/TwitterBrowser";
@@ -42,6 +42,13 @@ describe("UserProfileView with Playwright", () => {
     test("get user bio", async () => {
       const bio = await profileView.readBio();
       expect(bio).toBe(testData.bio);
+    });
+  });
+
+  describe("Failures", () => {
+    test("User not found", async () => {
+      const open = () => twitterBrowser.openUserProfile("qeri112233445566");
+      await expect(open()).rejects.toThrowError(/not found/i);
     });
   });
 });
