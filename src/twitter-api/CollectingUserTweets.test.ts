@@ -1,8 +1,8 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+import { Tweet } from "../twitter-model/Tweet";
 import { collectingUserTweets } from "./CollectingUserTweets";
-import { UserTweetsView } from "./twitter-api/ports/UserTweetsView";
-import { Tweet } from "./twitter-model/Tweet";
+import { UserTweetsView } from "./ports/UserTweetsView";
 
 describe("collecting user tweets", () => {
   let testTweetsView: MockProxy<UserTweetsView>;
