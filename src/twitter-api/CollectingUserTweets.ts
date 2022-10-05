@@ -1,5 +1,5 @@
 import { Tweet } from "../twitter-model/Tweet";
-import { UserTweetsView } from "./ports/UserTweetsView";
+import { UserTweetsView } from "./ports";
 
 export const collectingUserTweets = async (
   tweetsView: UserTweetsView,
