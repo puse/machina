@@ -1,6 +1,6 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
-import { UserDetails } from "../twitter-model/UserDetails";
+import { UserDetails } from "@/twitter-model/UserDetails";
 import { obtainingUserDetails } from "./ObtainingUserDetails";
 import { UserProfileView } from "./ports/UserProfileView";
 

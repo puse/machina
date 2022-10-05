@@ -1,4 +1,4 @@
-import { UserDetails } from "../twitter-model/UserDetails";
+import { UserDetails } from "@/twitter-model/UserDetails";
 import { UserProfileView } from "./ports/UserProfileView";
 
 export const obtainingUserDetails = async (

@@ -1,6 +1,6 @@
 import assert from "assert";
 import { Locator, Page } from "playwright";
-import { UserTweetsView } from "../twitter-api/ports/UserTweetsView";
+import { UserTweetsView } from "@/twitter-api/ports/UserTweetsView";
 
 export class UserTweetsViewAdapter implements UserTweetsView {
   private page: Page;
