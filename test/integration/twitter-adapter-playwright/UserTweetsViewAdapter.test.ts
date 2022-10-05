@@ -2,26 +2,29 @@ import { Browser, BrowserContext, chromium, Page } from "playwright";
 import { UserTweetsView } from "@/twitter-api/ports/UserTweetsView";
 import { Tweet } from "@/twitter-model/Tweet";
 import { UserTweetsViewAdapter } from "@/twitter-adapter-playwright/UserTweetsViewAdapter";
+import { TwitterBrowser } from "@/twitter-api/ports/TwitterBrowser";
+import { TwitterBrowserAdapter } from "@/twitter-adapter-playwright/TwitterBrowserAdapter";
 
 jest.setTimeout(30000);
 
 describe("UserTweetsView with Playwright", () => {
-  let testBrowser: Browser;
-  let testBrowserContext: BrowserContext;
-  let testPage: Page;
+  let browser: Browser;
+  let browserContext: BrowserContext;
+  let twitterBrowser: TwitterBrowser;
 
   beforeAll(async () => {
-    testBrowser = await chromium.launch({ devtools: false });
-    testBrowserContext = await testBrowser.newContext();
+    browser = await chromium.launch({ devtools: false });
+    browserContext = await browser.newContext();
+    twitterBrowser = new TwitterBrowserAdapter(browserContext);
   });
 
   afterAll(async () => {
-    await testBrowserContext.close();
-    await testBrowser.close();
+    await browserContext.close();
+    await browser.close();
   });
 
   describe("Ordinar behavior: case of @qeri55916757", () => {
-    let testView: UserTweetsView;
+    let tweetsView: UserTweetsView;
 
     const testTweets: Tweet[] = [
       {
@@ -39,26 +42,21 @@ describe("UserTweetsView with Playwright", () => {
     ];
 
     beforeAll(async () => {
-      testPage = await testBrowserContext.newPage();
-      testView = new UserTweetsViewAdapter(testPage);
-    });
-
-    test("open by username", async () => {
-      await testView.open("qeri55916757");
+      tweetsView = await twitterBrowser.openUserTweets("qeri55916757");
     });
 
     test("read the first tweet", async () => {
-      const tweet = await testView.readNextTweet();
+      const tweet = await tweetsView.readNextTweet();
       expect(tweet).toEqual(testTweets[0]);
     });
 
     test("read the last tweet", async () => {
-      const tweet = await testView.readNextTweet();
+      const tweet = await tweetsView.readNextTweet();
       expect(tweet).toEqual(testTweets[1]);
     });
 
     test("read one more time after the last tweet", async () => {
-      const tweet = await testView.readNextTweet();
+      const tweet = await tweetsView.readNextTweet();
       expect(tweet).toBeNull();
     });
   });

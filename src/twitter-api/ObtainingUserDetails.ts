@@ -1,11 +1,15 @@
 import { UserDetails } from "@/twitter-model/UserDetails";
-import { UserProfileView } from "./ports/UserProfileView";
+import { TwitterBrowser } from "./ports/TwitterBrowser";
+
+type Dependencies = {
+  twitterBrowser: TwitterBrowser;
+};
 
 export const obtainingUserDetails = async (
-  profileView: UserProfileView,
+  { twitterBrowser }: Dependencies,
   username: string
 ): Promise<UserDetails> => {
-  await profileView.open(username);
+  const profileView = await twitterBrowser.openUserProfile(username);
 
   const name = await profileView.readName();
   const bio = await profileView.readBio();

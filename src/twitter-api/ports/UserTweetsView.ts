@@ -6,6 +6,5 @@ type ParsedTweet = {
 };
 
 export type UserTweetsView = {
-  open: (username: string) => Promise<void>;
   readNextTweet: () => Promise<ParsedTweet | null>;
 };

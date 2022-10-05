@@ -1,22 +1,24 @@
 import { Browser, BrowserContext, chromium, Page } from "playwright";
 import { UserProfileView } from "@/twitter-api/ports/UserProfileView";
-import { UserProfileViewAdapter } from "@/twitter-adapter-playwright/UserProfileViewAdapter";
+import { TwitterBrowserAdapter } from "@/twitter-adapter-playwright/TwitterBrowserAdapter";
+import { TwitterBrowser } from "@/twitter-api/ports/TwitterBrowser";
 
 jest.setTimeout(30000);
 
 describe("UserProfileView with Playwright", () => {
-  let testBrowser: Browser;
-  let testBrowserContext: BrowserContext;
-  let testPage: Page;
+  let browser: Browser;
+  let browserContext: BrowserContext;
+  let twitterBrowser: TwitterBrowser;
 
   beforeAll(async () => {
-    testBrowser = await chromium.launch({ devtools: false });
-    testBrowserContext = await testBrowser.newContext();
+    browser = await chromium.launch({ devtools: false });
+    browserContext = await browser.newContext();
+    twitterBrowser = new TwitterBrowserAdapter(browserContext);
   });
 
   afterAll(async () => {
-    await testBrowserContext.close();
-    await testBrowser.close();
+    await browserContext.close();
+    await browser.close();
   });
 
   describe("Ordinar behavior: case of @qeri55916757", () => {
@@ -29,12 +31,7 @@ describe("UserProfileView with Playwright", () => {
     };
 
     beforeAll(async () => {
-      testPage = await testBrowserContext.newPage();
-      profileView = new UserProfileViewAdapter(testPage);
-    });
-
-    test("open by username", async () => {
-      await profileView.open("qeri55916757");
+      profileView = await twitterBrowser.openUserProfile("qeri55916757");
     });
 
     test("get user display name", async () => {

@@ -1,15 +1,6 @@
-import { chromium } from "playwright";
 import { RunnerContext } from "./RunnerContext.js";
+import { setupRunnerContext } from "./setup.js";
 import { commands } from "./commands/index.js";
-
-const setupRunnerContext = async (
-  flags: Record<string, unknown>
-): Promise<RunnerContext> => {
-  const browser = await chromium.launch(flags);
-  const browserContext = await browser.newContext();
-
-  return { browser, browserContext };
-};
 
 const tearDownRunnerContext = async (context: RunnerContext): Promise<void> => {
   await context.browserContext.close();
