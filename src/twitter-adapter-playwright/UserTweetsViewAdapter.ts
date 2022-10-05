@@ -71,12 +71,10 @@ export class UserTweetsViewAdapter implements UserTweetsView {
   }
 
   static async ensureTweets({ page }: ViewContext) {
-    const rejectWithNotFound = async () => {
-      return Promise.reject(new Error("Not found"));
-    };
+    const rejectWithNotFound = () => Promise.reject(new Error("Not found"));
 
     return Promise.race([
-      page.locator('article[data-testid="tweet"]').first(),
+      page.waitForSelector('article[data-testid="tweet"]'),
       page
         .waitForSelector('[data-testid="emptyState"]')
         .then(rejectWithNotFound),

@@ -12,7 +12,7 @@ describe("UserTweetsView with Playwright", () => {
   let twitterBrowser: TwitterBrowser;
 
   beforeAll(async () => {
-    browser = await chromium.launch({ devtools: true });
+    browser = await chromium.launch({ devtools: false });
     browserContext = await browser.newContext();
     twitterBrowser = new TwitterBrowserAdapter(browserContext);
   });

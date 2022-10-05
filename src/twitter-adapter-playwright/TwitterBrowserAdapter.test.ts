@@ -1,9 +1,22 @@
 import { mock, MockProxy } from "jest-mock-extended";
-import { BrowserContext, Page } from "playwright";
+import delay from "delay";
+import { BrowserContext, ElementHandle, Page } from "playwright";
 import { TwitterBrowser } from "@/twitter-api/ports/TwitterBrowser";
 import { UserProfileViewAdapter } from "./UserProfileViewAdapter";
 import { UserTweetsViewAdapter } from "./UserTweetsViewAdapter";
 import { TwitterBrowserAdapter } from "./TwitterBrowserAdapter";
+
+/** Helper function to resolve ElementHandle based on given order.
+ * Useful for `page.waitForSelector`
+ */
+const resolveSelectorInOrder =
+  (partials: string[]) =>
+  async (selector: string): Promise<ElementHandle<HTMLElement>> => {
+    const index = partials.findIndex((partial) => selector.includes(partial));
+    const order = index === -1 ? partials.length : index;
+    await delay(order * 10);
+    return null as unknown as ElementHandle<HTMLElement>;
+  };
 
 describe("TwitterBrowser", () => {
   let browserContext: MockProxy<BrowserContext>;
@@ -31,26 +44,68 @@ describe("TwitterBrowser", () => {
     });
 
     describe("openUserProfile", () => {
+      beforeEach(() => {
+        page.waitForSelector.mockImplementation(
+          resolveSelectorInOrder([
+            'data-testid="UserName"',
+            'data-testid="emptyState"',
+          ])
+        );
+      });
+
       test("should open Twitter profile", async () => {
         await twitterBrowser.openUserProfile("shakira");
-        expect(page.goto).toHaveBeenCalledWith("https://twitter.com/shakira");
+        expect(page.goto).toHaveBeenCalled();
       });
 
       test("should return proper view", async () => {
         const view = await twitterBrowser.openUserProfile("shakira");
         expect(view).toBeInstanceOf(UserProfileViewAdapter);
       });
+
+      test("should fail if user not found", async () => {
+        page.waitForSelector.mockImplementation(
+          resolveSelectorInOrder([
+            'data-testid="emptyState"',
+            'data-testid="UserName"',
+          ])
+        );
+
+        const open = () => twitterBrowser.openUserTweets("shakira");
+        await expect(open()).rejects.toThrowError(/not found/i);
+      });
     });
 
     describe("openUserTweets", () => {
+      beforeEach(() => {
+        page.waitForSelector.mockImplementation(
+          resolveSelectorInOrder([
+            'data-testid="tweet"',
+            'data-testid="emptyState"',
+          ])
+        );
+      });
+
       test("should open Twitter profile", async () => {
         await twitterBrowser.openUserTweets("shakira");
-        expect(page.goto).toHaveBeenCalledWith("https://twitter.com/shakira");
+        expect(page.goto).toHaveBeenCalled();
       });
 
       test("should return proper view", async () => {
         const view = await twitterBrowser.openUserTweets("shakira");
         expect(view).toBeInstanceOf(UserTweetsViewAdapter);
+      });
+
+      test("should fail if user not found", async () => {
+        page.waitForSelector.mockImplementation(
+          resolveSelectorInOrder([
+            'data-testid="emptyState"',
+            'data-testid="tweet"',
+          ])
+        );
+
+        const open = () => twitterBrowser.openUserTweets("shakira");
+        await expect(open()).rejects.toThrowError(/not found/i);
       });
     });
   });
