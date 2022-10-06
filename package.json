@@ -1,6 +1,6 @@
 {
   "name": "machina",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
   "description": "Proof-of-concept browser automation toolkit",
   "main": "index.js",
